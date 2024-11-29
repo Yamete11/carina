@@ -1,10 +1,10 @@
 package test;
 
+import com.zebrunner.carina.api.GetWeatherMethod;
 import com.zebrunner.carina.core.registrar.ownership.MethodOwner;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import solvd.laba.api.GetWeatherMethod;
 
 public class APICarinaTest {
 
