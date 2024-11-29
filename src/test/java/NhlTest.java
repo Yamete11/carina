@@ -98,5 +98,17 @@ public class NhlTest implements IAbstractTest {
         }
     }
 
+    @Test
+    public void testContactUsPage(){
+        HomePageBase homePage = initPage(getDriver(), HomePageBase.class);
+        homePage.open();
+        assertTrue(homePage.isPageOpened(), "Home page is not displayed");
+
+        homePage.openContactUsPage();
+
+        assertEquals(getDriver().getCurrentUrl(), "https://www.nhl.com/info/contact-us", "Wrong page URL!");
+
+    }
+
 
 }

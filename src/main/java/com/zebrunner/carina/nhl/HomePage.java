@@ -51,6 +51,10 @@ public class HomePage extends HomePageBase{
         return getFooterMenu().openTerms();
     }
 
+    public ContactUsPage openContactUsPage() {
+        return getFooterMenu().openContactUsPage();
+    }
+
     public List<ExtendedWebElement> getStories() {
         return stories;
     }
