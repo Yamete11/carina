@@ -1,12 +1,15 @@
 package com.zebrunner.carina.nhl.components;
 
-import com.zebrunner.carina.nhl.ContactUsPage;
-import com.zebrunner.carina.nhl.TermsPage;
+import com.zebrunner.carina.nhl.*;
 import com.zebrunner.carina.webdriver.decorator.ExtendedWebElement;
 import com.zebrunner.carina.webdriver.gui.AbstractUIObject;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class FootMenu extends AbstractUIObject {
 
@@ -24,19 +27,24 @@ public class FootMenu extends AbstractUIObject {
         super(driver, searchContext);
     }
 
-    public TermsPage openTerms(){
+    public TermsPageBase openTerms() {
         termsButton.scrollTo();
-        termsButton.hover();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.elementToBeClickable(termsButton.getElement()));
+
         termsButton.click();
-        return new TermsPage(driver);
+        return initPage(driver, TermsPageBase.class);
+
     }
 
-    public ContactUsPage openContactUsPage(){
+    public ContactUsPageBase openContactUsPage(){
         aboutButton.scrollTo();
         aboutButton.hover();
         aboutButton.click();
         contactUsButton.hover();
         contactUsButton.click();
-        return new ContactUsPage(driver);
+        return initPage(driver, ContactUsPageBase.class);
+
     }
 }

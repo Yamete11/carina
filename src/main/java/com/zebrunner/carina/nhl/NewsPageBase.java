@@ -8,6 +8,6 @@ public abstract class NewsPageBase extends AbstractPage {
         super(driver);
     }
 
-    public abstract NewsPage openNewsPage();
-    public abstract TermsPage openTermsPage();
+    public abstract NewsPageBase openNewsPage();
+    public abstract TermsPageBase openTermsPage();
 }

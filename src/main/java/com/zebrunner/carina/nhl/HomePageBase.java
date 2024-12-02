@@ -24,10 +24,10 @@ public abstract class HomePageBase extends AbstractPage {
         acceptCookieButton.clickIfPresent(3);
     }
 
-    public abstract NewsPage openNewsPage();
-    public abstract TermsPage openTermsPage();
-    public abstract PlayersPage openPlayersPage();
+    public abstract NewsPageBase openNewsPage();
+    public abstract TermsPageBase openTermsPage();
+    public abstract PlayersPageBase openPlayersPage();
     public abstract List<ExtendedWebElement> getStories();
-    public abstract ContactUsPage openContactUsPage();
+    public abstract ContactUsPageBase openContactUsPage();
 
 }

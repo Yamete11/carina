@@ -34,11 +34,11 @@ public class HomePage extends HomePageBase{
         return headerMenu;
     }
 
-    public NewsPage openNewsPage(){
+    public NewsPageBase openNewsPage(){
         return getHeaderMenu().openNewsPage();
     }
 
-    public PlayersPage openPlayersPage(){
+    public PlayersPageBase openPlayersPage(){
         return getHeaderMenu().openPlayersPage();
     }
 
@@ -47,11 +47,11 @@ public class HomePage extends HomePageBase{
         return footerMenu;
     }
 
-    public TermsPage openTermsPage() {
+    public TermsPageBase openTermsPage() {
         return getFooterMenu().openTerms();
     }
 
-    public ContactUsPage openContactUsPage() {
+    public ContactUsPageBase openContactUsPage() {
         return getFooterMenu().openContactUsPage();
     }
 

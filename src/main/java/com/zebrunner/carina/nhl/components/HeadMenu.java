@@ -1,7 +1,9 @@
 package com.zebrunner.carina.nhl.components;
 
 import com.zebrunner.carina.nhl.NewsPage;
+import com.zebrunner.carina.nhl.NewsPageBase;
 import com.zebrunner.carina.nhl.PlayersPage;
+import com.zebrunner.carina.nhl.PlayersPageBase;
 import com.zebrunner.carina.webdriver.decorator.ExtendedWebElement;
 import com.zebrunner.carina.webdriver.gui.AbstractUIObject;
 import org.openqa.selenium.SearchContext;
@@ -21,15 +23,15 @@ public class HeadMenu extends AbstractUIObject {
         super(driver, searchContext);
     }
 
-    public NewsPage openNewsPage(){
+    public NewsPageBase openNewsPage(){
         newsButton.hover();
         newsButton.click();
-        return new NewsPage(driver);
+        return initPage(driver, NewsPageBase.class);
     }
 
-    public PlayersPage openPlayersPage(){
+    public PlayersPageBase openPlayersPage(){
         playersButton.hover();
         playersButton.click();
-        return new PlayersPage(driver);
+        return initPage(driver, PlayersPageBase.class);
     }
 }

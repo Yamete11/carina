@@ -24,16 +24,15 @@ public class NewsPage extends NewsPageBase{
         return headerMenu;
     }
 
-    public NewsPage openNewsPage(){
+    public NewsPageBase openNewsPage(){
         return getHeaderMenu().openNewsPage();
     }
-
 
     public FootMenu getFooterMenu() {
         return footerMenu;
     }
 
-    public TermsPage openTermsPage() {
+    public TermsPageBase openTermsPage() {
         return getFooterMenu().openTerms();
     }
 }
