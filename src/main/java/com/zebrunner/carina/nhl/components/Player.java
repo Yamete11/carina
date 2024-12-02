@@ -8,16 +8,16 @@ import org.openqa.selenium.support.FindBy;
 
 public class Player extends AbstractUIObject {
 
-    @FindBy(xpath = "./span")
+    @FindBy(xpath = ".//span[@class='sc-ekcpMq gepVpB']")
     private ExtendedWebElement playerName;
 
-    @FindBy(xpath = "./div[2]/div[1]/div/div/img")
+    @FindBy(xpath = ".//img[@class='sc-jiSpbx fHEaeZ team-logo']")
     private ExtendedWebElement teamImg;
 
-    @FindBy(xpath = "./div[2]")
+    @FindBy(xpath = ".//div[@class='sc-dlunQd gULoAA']")
     private ExtendedWebElement position;
 
-    @FindBy(xpath = "./div[2]/div[2]")
+    @FindBy(xpath = ".//div[@class='sc-cWUBqk ekHWbO']")
     private ExtendedWebElement number;
 
     public Player(WebDriver driver, SearchContext searchContext) {

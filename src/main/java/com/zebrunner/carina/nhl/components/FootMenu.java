@@ -14,13 +14,13 @@ import java.time.Duration;
 public class FootMenu extends AbstractUIObject {
 
 
-    @FindBy(xpath = "./section/div/div[1]/nav[2]/ul/li[1]/a")
+    @FindBy(xpath = "//a[@href='/info/terms-of-service']")
     private ExtendedWebElement termsButton;
 
-    @FindBy(xpath = "./section/div/div[1]/nav[2]/ul/li[8]/button")
+    @FindBy(xpath = "//button[@data-js-button-footer-dropdown]\n")
     private ExtendedWebElement aboutButton;
 
-    @FindBy(xpath = "//*[@id=\"bd5ddadd-d50d-4800-85eb-88ac552c1501\"]/ul/li[8]/a")
+    @FindBy(xpath = "//a[@href='/info/contact-us']")
     private ExtendedWebElement contactUsButton;
 
     public FootMenu(WebDriver driver, SearchContext searchContext) {

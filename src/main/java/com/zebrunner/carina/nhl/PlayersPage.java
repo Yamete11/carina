@@ -10,21 +10,28 @@ import java.util.List;
 
 @DeviceType(pageType = DeviceType.Type.DESKTOP, parentClass = PlayersPageBase.class)
 public class PlayersPage extends PlayersPageBase{
-    @FindBy(xpath = "//*[@id=\"root\"]/div[2]/div/div/div[3]/a/span")
-    private List<ExtendedWebElement> players;
+    @FindBy(xpath = "//a[@class='sc-eyCcmj jMLklB']")
+    private List<Player> players;
 
-    @FindBy(xpath = "//*[@id=\"root\"]/div[2]/div/div/div[3]/a[1]")
-    private Player player;
+    @FindBy(xpath = "//a[@class='sc-eyCcmj jMLklB']")
+    private List<ExtendedWebElement> playersLinks;
 
     public PlayersPage(WebDriver driver) {
         super(driver);
     }
 
-    public List<ExtendedWebElement> getPlayers() {
+    public List<Player> getPlayers() {
         return players;
     }
 
-    public Player getPlayer() {
-        return player;
+    public List<ExtendedWebElement> getPlayersLinks() {
+        return playersLinks;
     }
+
+    public SinglePlayerPageBase openLink(ExtendedWebElement link){
+        link.hover();
+        link.click();
+        return initPage(driver, SinglePlayerPageBase.class);
+    }
+
 }

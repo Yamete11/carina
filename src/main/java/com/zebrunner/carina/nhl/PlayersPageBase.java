@@ -13,7 +13,8 @@ public abstract class PlayersPageBase extends AbstractPage {
         super(driver);
     }
 
-    public abstract List<ExtendedWebElement> getPlayers();
+    public abstract List<Player> getPlayers();
+    public abstract List<ExtendedWebElement> getPlayersLinks();
+    public abstract SinglePlayerPageBase openLink(ExtendedWebElement link);
 
-    public abstract Player getPlayer();
 }

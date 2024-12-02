@@ -1,7 +1,9 @@
 package com.zebrunner.carina.nhl;
 
 import com.zebrunner.carina.nhl.components.FootMenu;
+import com.zebrunner.carina.nhl.components.HeadMenu;
 import com.zebrunner.carina.webdriver.decorator.ExtendedWebElement;
+import com.zebrunner.carina.webdriver.decorator.PageOpeningStrategy;
 import com.zebrunner.carina.webdriver.gui.AbstractPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
@@ -21,6 +23,8 @@ public abstract class HomePageBase extends AbstractPage {
     @Override
     public void open() {
         super.open();
+    }
+    public void acceptCookies() {
         acceptCookieButton.clickIfPresent(3);
     }
 
@@ -29,5 +33,8 @@ public abstract class HomePageBase extends AbstractPage {
     public abstract PlayersPageBase openPlayersPage();
     public abstract List<ExtendedWebElement> getStories();
     public abstract ContactUsPageBase openContactUsPage();
+    public abstract FootMenu getFooterMenu();
+    public abstract HeadMenu getHeaderMenu();
+    public abstract StoryPageBase openStory(ExtendedWebElement link);
 
 }
