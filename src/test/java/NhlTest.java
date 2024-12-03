@@ -9,6 +9,8 @@ import com.zebrunner.carina.webdriver.decorator.ExtendedWebElement;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.LoggerFactory;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.slf4j.Logger;
@@ -21,21 +23,26 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 public class NhlTest implements IAbstractTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    private HomePageBase homePage;
+
+    @BeforeMethod
+    public void setUp() {
+        WebDriver driver = getDriver();
+        homePage = initPage(driver, HomePageBase.class);
+        homePage.open();
+        homePage.acceptCookies();
+    }
 
 
     //Test takes all the players from the page and check all its fields
     @Test
     @MethodOwner(owner = "demo")
     public void testPlayersConsistency() {
-        HomePageBase homePage = initPage(getDriver(), HomePageBase.class);
-        homePage.open();
-        homePage.acceptCookies();
         PlayersPageBase playersPage = homePage.getHeaderMenu().openPlayersPage();
         assertEquals(getDriver().getCurrentUrl(), R.CONFIG.get("playersUrl"), "Wrong page URL!");
 
@@ -76,9 +83,6 @@ public class NhlTest implements IAbstractTest {
     @Test
     @MethodOwner(owner = "demo")
     public void testPlayersLinks() throws InterruptedException {
-        HomePageBase homePage = initPage(getDriver(), HomePageBase.class);
-        homePage.open();
-        homePage.acceptCookies();
         PlayersPageBase playersPage = homePage.getHeaderMenu().openPlayersPage();
         assertEquals(getDriver().getCurrentUrl(), R.CONFIG.get("playersUrl"), "Wrong page URL!");
 
@@ -109,11 +113,6 @@ public class NhlTest implements IAbstractTest {
     @Test
     @MethodOwner(owner = "demo")
     public void testStories(){
-        HomePageBase homePage = initPage(getDriver(), HomePageBase.class);
-        homePage.open();
-        homePage.acceptCookies();
-        assertTrue(homePage.isPageOpened(), "Home page is not displayed");
-
         List<ExtendedWebElement> stories = homePage.getStories();
         assertEquals(stories.size(), 9, "Spotlight is empty");
         LOGGER.info("Number of stories equals: " + stories.size());
@@ -143,50 +142,81 @@ public class NhlTest implements IAbstractTest {
         softAssert.assertAll();
     }
 
-    @Test
-    @MethodOwner(owner = "demo")
-    public void testLanguage(){
-        HomePageBase homePage = initPage(getDriver(), HomePageBase.class);
-        homePage.open();
-        homePage.acceptCookies();
-        assertTrue(homePage.isPageOpened(), "Home page is not displayed");
-
-        homePage.getHeaderMenu().switchLanguage();
-
-        assertEquals(getDriver().getCurrentUrl(), R.CONFIG.get("svLanguage"), "Wrong page");
+    @DataProvider(name = "languageData")
+    public Object[][] createLanguageData() {
+        return new Object[][]{
+                {"en", "Top Stories"},
+                {"fr", "Nouvelles récentes"},
+                {"de", "Top Stories"},
+                {"fi", "Suosituimmat jutut"},
+                {"sv", "Toppnyheter"},
+                {"cs", "Hlavní zprávy"},
+                {"sk", "Hlavné správy"},
+                {"es", "Titulares"}
+        };
     }
 
-    @Test
+    @Test(dataProvider = "languageData")
     @MethodOwner(owner = "demo")
-    public void testSingIn(){
-        HomePageBase homePage = initPage(getDriver(), HomePageBase.class);
-        homePage.open();
-        homePage.acceptCookies();
-        assertTrue(homePage.isPageOpened(), "Home page is not displayed");
+    public void testLanguage(String lang, String checkTitle){
+        homePage.getHeaderMenu().switchLanguage(lang);
+        LOGGER.info(getDriver().getCurrentUrl());
+        assertEquals(homePage.getTopStoriesTitle().getText(), checkTitle, "Wrong page");
+    }
 
+
+
+    @DataProvider(name = "userData")
+    @MethodOwner(owner = "demo")
+    public Object[][] createUserData() {
+        return new Object[][]{
+                {R.TESTDATA.get("user.username") + "11@gmail.com", R.TESTDATA.get("user.password"), LoginOutcome.SUCCESS},
+                {"invalid123", "invalid123", LoginOutcome.INVALID_CREDENTIALS},
+                {"123", "123", LoginOutcome.FIELD_ERRORS}
+        };
+    }
+
+    @Test(dataProvider = "userData")
+    @MethodOwner(owner = "demo")
+    public void testSignIn(String username, String password, LoginOutcome outcome) {
         LoginPageBase loginPage = homePage.getHeaderMenu().openLoginPage();
-        loginPage.signIn(R.TESTDATA.get("username") + "11@gmail.com", R.TESTDATA.get("password"));
+        loginPage.signIn(username, password);
 
-        new WebDriverWait(getDriver(), Duration.ofSeconds(10))
-                .until(driver -> driver.getCurrentUrl().contains(homePage.getExpectedUrlPart()));
+        switch (outcome) {
+            case SUCCESS:
+                new WebDriverWait(getDriver(), Duration.ofSeconds(10))
+                        .until(driver -> driver.getCurrentUrl().contains(homePage.getExpectedUrlPart()));
 
-        LOGGER.info("Current URL after sign in: " + getDriver().getCurrentUrl());
+                LOGGER.info("Current URL after sign in: " + getDriver().getCurrentUrl());
+                assertTrue(homePage.isPageOpened(), "Home page is not displayed after sign-in");
 
-        assertTrue(homePage.isPageOpened(), "Home page is not displayed after sign-in");
+                ProfilePageBase profilePageBase = homePage.getHeaderMenu().openProfilePage();
+                assertTrue(profilePageBase.isPageOpened(), "Profile page is not displayed");
+                break;
 
-        ProfilePageBase profilePageBase = homePage.getHeaderMenu().openProfilePage();
+            case INVALID_CREDENTIALS:
+                assertTrue(loginPage.getErrorTitle().isVisible(), "Error message is not displayed for invalid credentials");
+                break;
 
-        assertTrue(profilePageBase.isPageOpened(), "Profile page is not displayed");
+            case FIELD_ERRORS:
+                List<ExtendedWebElement> errors = loginPage.getFieldsError();
+
+                SoftAssert softAssert = new SoftAssert();
+                for (ExtendedWebElement error : errors) {
+                    softAssert.assertTrue(error.isVisible(), "Error is not visible");
+                }
+                softAssert.assertAll();
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unsupported login outcome: " + outcome);
+        }
     }
+
 
     @Test
     @MethodOwner(owner = "demo")
     public void testInvalidSearch(){
-        HomePageBase homePage = initPage(getDriver(), HomePageBase.class);
-        homePage.open();
-        homePage.acceptCookies();
-        assertTrue(homePage.isPageOpened(), "Home page is not displayed");
-
         SearchPageBase searchPage =  homePage.getHeaderMenu().openSearchPage();
 
         assertTrue(searchPage.isPageOpened(), "Wrong URL");
@@ -194,9 +224,5 @@ public class NhlTest implements IAbstractTest {
         searchPage.enterQuery("asdasdasdasd");
         assertEquals(searchPage.getSearchSubTitle().getText().trim(), "Sorry, no matches were found with \"asdasdasdasd\". Try a new search", "Wrong output");
     }
-
-
-
-
 
 }

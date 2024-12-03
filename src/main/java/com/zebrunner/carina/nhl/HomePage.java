@@ -77,4 +77,8 @@ public class HomePage extends HomePageBase{
     public String getExpectedUrlPart(){
         return R.CONFIG.get("homeUrl");
     }
+
+    public ExtendedWebElement getTopStoriesTitle() {
+        return topStoriesTitle;
+    }
 }

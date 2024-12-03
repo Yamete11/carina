@@ -6,6 +6,8 @@ import com.zebrunner.carina.webdriver.decorator.PageOpeningStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.List;
+
 @DeviceType(pageType = DeviceType.Type.DESKTOP, parentClass = LoginPageBase.class)
 public class LoginPage extends LoginPageBase{
 
@@ -21,6 +23,13 @@ public class LoginPage extends LoginPageBase{
     @FindBy(xpath = "//div[@class='header']//h1")
     private ExtendedWebElement pageTitle;
 
+    @FindBy(xpath = "//div[@class='sc-dkrFOg byGefN message-container']")
+    private ExtendedWebElement errorTitle;
+
+    @FindBy(xpath = "//div[@class='sc-ksBlkl iwKhDT error-message']")
+    private List<ExtendedWebElement> fieldsError;
+
+
 
     public LoginPage(WebDriver driver) {
         super(driver);
@@ -33,6 +42,17 @@ public class LoginPage extends LoginPageBase{
         return pageTitle.isElementPresent();
     }
 
+    @Override
+    public ExtendedWebElement getErrorTitle() {
+        return errorTitle;
+    }
+
+    @Override
+    public List<ExtendedWebElement> getFieldsError() {
+        return fieldsError;
+    }
+
+    @Override
     public void signIn(String email, String pass){
         login.type(email);
         password.type(pass);

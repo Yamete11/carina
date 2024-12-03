@@ -35,5 +35,6 @@ public abstract class HomePageBase extends AbstractPage {
     public abstract HeadMenu getHeaderMenu();
     public abstract StoryPageBase openStory(ExtendedWebElement link);
     public abstract String getExpectedUrlPart();
+    public abstract ExtendedWebElement getTopStoriesTitle();
 
 }
