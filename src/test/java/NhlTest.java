@@ -1,3 +1,4 @@
+import com.github.kklisura.cdt.protocol.types.profiler.Profile;
 import com.zebrunner.carina.core.IAbstractTest;
 import com.zebrunner.carina.core.registrar.ownership.MethodOwner;
 import com.zebrunner.carina.nhl.*;
@@ -119,21 +120,25 @@ public class NhlTest implements IAbstractTest {
 
         SoftAssert softAssert = new SoftAssert();
         for (ExtendedWebElement story : stories) {
+
+            new WebDriverWait(getDriver(), Duration.ofSeconds(10))
+                    .until(driver -> story.isVisible());
+
             String storyTitle = story.getText().trim();
-            assertTrue(storyTitle.length() > 0, "Story is empty: " + story);
+            softAssert.assertTrue(storyTitle.length() > 0, "Story is empty: " + story);
             LOGGER.info("Verified story with text: " + storyTitle);
+
 
             StoryPageBase storyPage = homePage.openStory(story);
 
             new WebDriverWait(getDriver(), Duration.ofSeconds(10))
                     .until(driver -> storyPage.getPageTitle().isVisible());
 
+            assertTrue(storyPage.getPageTitle().getText().trim().length() > 0, "Story page title is empty");
+
             LOGGER.info("Verified story with text: " + storyPage.getPageTitle().getText());
 
-            softAssert.assertTrue(storyPage.getPageTitle().getText().trim().length() > 0, "Story page title is empty");
-
-
-            getDriver().navigate().back();
+            storyPage.navigateBack();
         }
         softAssert.assertAll();
     }
@@ -160,13 +165,34 @@ public class NhlTest implements IAbstractTest {
         assertTrue(homePage.isPageOpened(), "Home page is not displayed");
 
         LoginPageBase loginPage = homePage.getHeaderMenu().openLoginPage();
-        loginPage.signIn();
+        loginPage.signIn(R.TESTDATA.get("username") + "11@gmail.com", R.TESTDATA.get("password"));
 
         new WebDriverWait(getDriver(), Duration.ofSeconds(10))
-                .until(driver -> homePage.isPageOpened());
+                .until(driver -> driver.getCurrentUrl().contains(homePage.getExpectedUrlPart()));
 
-        assertEquals(getDriver().getCurrentUrl(), R.CONFIG.get("homeUrl"), "Wrong page");
+        LOGGER.info("Current URL after sign in: " + getDriver().getCurrentUrl());
 
+        assertTrue(homePage.isPageOpened(), "Home page is not displayed after sign-in");
+
+        ProfilePageBase profilePageBase = homePage.getHeaderMenu().openProfilePage();
+
+        assertTrue(profilePageBase.isPageOpened(), "Profile page is not displayed");
+    }
+
+    @Test
+    @MethodOwner(owner = "demo")
+    public void testInvalidSearch(){
+        HomePageBase homePage = initPage(getDriver(), HomePageBase.class);
+        homePage.open();
+        homePage.acceptCookies();
+        assertTrue(homePage.isPageOpened(), "Home page is not displayed");
+
+        SearchPageBase searchPage =  homePage.getHeaderMenu().openSearchPage();
+
+        assertTrue(searchPage.isPageOpened(), "Wrong URL");
+
+        searchPage.enterQuery("asdasdasdasd");
+        assertEquals(searchPage.getSearchSubTitle().getText().trim(), "Sorry, no matches were found with \"asdasdasdasd\". Try a new search", "Wrong output");
     }
 
 

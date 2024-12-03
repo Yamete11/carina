@@ -31,9 +31,9 @@ public abstract class HomePageBase extends AbstractPage {
     public abstract NewsPageBase openNewsPage();
     public abstract PlayersPageBase openPlayersPage();
     public abstract List<ExtendedWebElement> getStories();
-    public abstract ContactUsPageBase openContactUsPage();
     public abstract FootMenu getFooterMenu();
     public abstract HeadMenu getHeaderMenu();
     public abstract StoryPageBase openStory(ExtendedWebElement link);
+    public abstract String getExpectedUrlPart();
 
 }

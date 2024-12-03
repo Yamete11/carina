@@ -2,6 +2,7 @@ package com.zebrunner.carina.nhl;
 
 import com.zebrunner.carina.utils.factory.DeviceType;
 import com.zebrunner.carina.webdriver.decorator.ExtendedWebElement;
+import com.zebrunner.carina.webdriver.decorator.PageOpeningStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -17,14 +18,24 @@ public class LoginPage extends LoginPageBase{
     @FindBy(xpath = "//form[@class='sc-hHTYSt UJRKf profile-form']//button")
     private ExtendedWebElement signInButton;
 
+    @FindBy(xpath = "//div[@class='header']//h1")
+    private ExtendedWebElement pageTitle;
+
 
     public LoginPage(WebDriver driver) {
         super(driver);
+        setPageOpeningStrategy(PageOpeningStrategy.BY_ELEMENT);
+        setUiLoadedMarker(pageTitle);
     }
 
-    public void signIn(){
-        login.type("glebasher11@gmail.com");
-        password.type("Password123");
+    @Override
+    public boolean isPageOpened() {
+        return pageTitle.isElementPresent();
+    }
+
+    public void signIn(String email, String pass){
+        login.type(email);
+        password.type(pass);
         signInButton.click();
     }
 }

@@ -3,6 +3,7 @@ package com.zebrunner.carina.nhl;
 import com.zebrunner.carina.nhl.components.Player;
 import com.zebrunner.carina.utils.factory.DeviceType;
 import com.zebrunner.carina.webdriver.decorator.ExtendedWebElement;
+import com.zebrunner.carina.webdriver.decorator.PageOpeningStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -16,8 +17,18 @@ public class PlayersPage extends PlayersPageBase{
     @FindBy(xpath = "//a[@class='sc-eyCcmj jMLklB']")
     private List<ExtendedWebElement> playersLinks;
 
+    @FindBy(xpath = "//div[@class='sc-egpspN foBIiO']//h1")
+    private ExtendedWebElement pageTitle;
+
     public PlayersPage(WebDriver driver) {
         super(driver);
+        setPageOpeningStrategy(PageOpeningStrategy.BY_ELEMENT);
+        setUiLoadedMarker(pageTitle);
+    }
+
+    @Override
+    public boolean isPageOpened() {
+        return pageTitle.isElementPresent();
     }
 
     public List<Player> getPlayers() {

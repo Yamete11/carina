@@ -27,6 +27,12 @@ public class HeadMenu extends AbstractUIObject {
     @FindBy(xpath = "//a[@class='nhl-o-menu__link' and @title='Sign In']")
     private ExtendedWebElement loginButton;
 
+    @FindBy(xpath = "//a[@class='nhl-o-menu__link' and @title='Profile']")
+    private ExtendedWebElement profileButton;
+
+    @FindBy(xpath = "//a[@class='nhl-c-header__btn nhl-c-header__btn--search' and @title='Search']")
+    private ExtendedWebElement searchButton;
+
 
     public HeadMenu(WebDriver driver, SearchContext searchContext) {
         super(driver, searchContext);
@@ -51,10 +57,26 @@ public class HeadMenu extends AbstractUIObject {
         return initPage(driver, LoginPageBase.class);
     }
 
+    public ProfilePageBase openProfilePage(){
+        profileButton.hover();
+        profileButton.click();
+        return initPage(driver, ProfilePageBase.class);
+    }
+
     public void switchLanguage(){
         languageButton.hover();
         languageButton.click();
         svLanguageButton.hover();
         svLanguageButton.click();
+    }
+
+    public SearchPageBase openSearchPage(){
+        searchButton.hover();
+        searchButton.click();
+        return initPage(driver, SearchPageBase.class);
+    }
+
+    public ExtendedWebElement getLoginButton() {
+        return loginButton;
     }
 }

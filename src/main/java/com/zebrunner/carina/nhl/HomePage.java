@@ -2,6 +2,7 @@ package com.zebrunner.carina.nhl;
 
 import com.zebrunner.carina.nhl.components.FootMenu;
 import com.zebrunner.carina.nhl.components.HeadMenu;
+import com.zebrunner.carina.utils.R;
 import com.zebrunner.carina.utils.factory.DeviceType;
 import com.zebrunner.carina.webdriver.decorator.ExtendedWebElement;
 import com.zebrunner.carina.webdriver.decorator.PageOpeningStrategy;
@@ -63,11 +64,6 @@ public class HomePage extends HomePageBase{
 
 
     @Override
-    public ContactUsPageBase openContactUsPage() {
-        return getFooterMenu().openContactUsPage();
-    }
-
-    @Override
     public List<ExtendedWebElement> getStories() {
         return stories;
     }
@@ -76,5 +72,9 @@ public class HomePage extends HomePageBase{
         link.hover();
         link.click();
         return initPage(driver, StoryPageBase.class);
+    }
+
+    public String getExpectedUrlPart(){
+        return R.CONFIG.get("homeUrl");
     }
 }

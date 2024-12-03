@@ -28,14 +28,4 @@ public class FootMenu extends AbstractUIObject {
     }
 
 
-
-    public ContactUsPageBase openContactUsPage(){
-        aboutButton.scrollTo();
-        aboutButton.hover();
-        aboutButton.click();
-        contactUsButton.hover();
-        contactUsButton.click();
-        return initPage(driver, ContactUsPageBase.class);
-
-    }
 }

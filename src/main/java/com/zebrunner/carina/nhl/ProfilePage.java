@@ -6,14 +6,14 @@ import com.zebrunner.carina.webdriver.decorator.PageOpeningStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
-@DeviceType(pageType = DeviceType.Type.DESKTOP, parentClass = StoryPageBase.class)
-public class StoryPage extends StoryPageBase{
+@DeviceType(pageType = DeviceType.Type.DESKTOP, parentClass = ProfilePageBase.class)
+public class ProfilePage extends ProfilePageBase{
 
-    @FindBy(xpath = "//h1[@class='nhl-c-article__title nhl-ty-heading--h2']")
+    @FindBy(xpath = "//div[@class='upper']//h2")
     private ExtendedWebElement pageTitle;
 
 
-    public StoryPage(WebDriver driver) {
+    public ProfilePage(WebDriver driver) {
         super(driver);
         setPageOpeningStrategy(PageOpeningStrategy.BY_ELEMENT);
         setUiLoadedMarker(pageTitle);
@@ -21,11 +21,6 @@ public class StoryPage extends StoryPageBase{
 
     @Override
     public boolean isPageOpened() {
-        return pageTitle.isElementPresent();
-    }
-
-    @Override
-    public ExtendedWebElement getPageTitle() {
-        return pageTitle;
+        return pageTitle.isPresent();
     }
 }

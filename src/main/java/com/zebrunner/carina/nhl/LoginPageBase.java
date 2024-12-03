@@ -8,5 +8,5 @@ public abstract class LoginPageBase extends AbstractPage {
         super(driver);
     }
 
-    public abstract void signIn();
+    public abstract void signIn(String email, String pass);
 }
