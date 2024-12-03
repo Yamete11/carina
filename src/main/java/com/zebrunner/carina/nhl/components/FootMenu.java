@@ -27,16 +27,7 @@ public class FootMenu extends AbstractUIObject {
         super(driver, searchContext);
     }
 
-    public TermsPageBase openTerms() {
-        termsButton.scrollTo();
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.elementToBeClickable(termsButton.getElement()));
-
-        termsButton.click();
-        return initPage(driver, TermsPageBase.class);
-
-    }
 
     public ContactUsPageBase openContactUsPage(){
         aboutButton.scrollTo();

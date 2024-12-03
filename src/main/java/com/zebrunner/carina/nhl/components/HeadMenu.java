@@ -1,9 +1,6 @@
 package com.zebrunner.carina.nhl.components;
 
-import com.zebrunner.carina.nhl.NewsPage;
-import com.zebrunner.carina.nhl.NewsPageBase;
-import com.zebrunner.carina.nhl.PlayersPage;
-import com.zebrunner.carina.nhl.PlayersPageBase;
+import com.zebrunner.carina.nhl.*;
 import com.zebrunner.carina.webdriver.decorator.ExtendedWebElement;
 import com.zebrunner.carina.webdriver.gui.AbstractUIObject;
 import org.openqa.selenium.SearchContext;
@@ -27,6 +24,9 @@ public class HeadMenu extends AbstractUIObject {
     @FindBy(xpath = "//li[@lang='sv']//a[@class='nhl-o-menu__link ']")
     private ExtendedWebElement svLanguageButton;
 
+    @FindBy(xpath = "//a[@class='nhl-o-menu__link' and @title='Sign In']")
+    private ExtendedWebElement loginButton;
+
 
     public HeadMenu(WebDriver driver, SearchContext searchContext) {
         super(driver, searchContext);
@@ -43,6 +43,12 @@ public class HeadMenu extends AbstractUIObject {
         playersButton.hover();
         playersButton.click();
         return initPage(driver, PlayersPageBase.class);
+    }
+
+    public LoginPageBase openLoginPage(){
+        loginButton.hover();
+        loginButton.click();
+        return initPage(driver, LoginPageBase.class);
     }
 
     public void switchLanguage(){

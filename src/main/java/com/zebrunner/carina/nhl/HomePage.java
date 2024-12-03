@@ -22,7 +22,7 @@ public class HomePage extends HomePageBase{
     @FindBy(xpath = "//*[@id=\"onetrust-accept-btn-handler\"]")
     private ExtendedWebElement acceptCookieButton;
 
-    @FindBy(xpath = "//*[@id=\"main-content\"]/section/div[3]/section[1]/div/div[2]/div[1]/ul/li/a/span")
+    @FindBy(xpath = "//a[@class='nhl-o-menu__link nhl-c-headlines__link']")
     List<ExtendedWebElement> stories;
 
     @FindBy(xpath = "//h5[@class='nhl-o-heading nhl-c-headlines__title nhl-ty-heading--h4']")
@@ -61,10 +61,6 @@ public class HomePage extends HomePageBase{
         return footerMenu;
     }
 
-    @Override
-    public TermsPageBase openTermsPage() {
-        return getFooterMenu().openTerms();
-    }
 
     @Override
     public ContactUsPageBase openContactUsPage() {

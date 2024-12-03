@@ -29,7 +29,6 @@ public abstract class HomePageBase extends AbstractPage {
     }
 
     public abstract NewsPageBase openNewsPage();
-    public abstract TermsPageBase openTermsPage();
     public abstract PlayersPageBase openPlayersPage();
     public abstract List<ExtendedWebElement> getStories();
     public abstract ContactUsPageBase openContactUsPage();

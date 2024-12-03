@@ -97,7 +97,7 @@ public class NhlTest implements IAbstractTest {
             new WebDriverWait(getDriver(), Duration.ofSeconds(10))
                     .until(driver -> singlePlayerPage.getPlayerName().isVisible());
 
-            assertTrue(text.contains(singlePlayerPage.getPlayerName().getText().trim()), "Player name does not match the link text!");
+            softAssert.assertTrue(text.contains(singlePlayerPage.getPlayerName().getText().trim()), "Player name does not match the link text!");
 
             getDriver().navigate().back();
         }
@@ -130,7 +130,7 @@ public class NhlTest implements IAbstractTest {
 
             LOGGER.info("Verified story with text: " + storyPage.getPageTitle().getText());
 
-            assertTrue(storyPage.getPageTitle().getText().trim().length() > 0, "Story page title is empty");
+            softAssert.assertTrue(storyPage.getPageTitle().getText().trim().length() > 0, "Story page title is empty");
 
 
             getDriver().navigate().back();
@@ -149,6 +149,24 @@ public class NhlTest implements IAbstractTest {
         homePage.getHeaderMenu().switchLanguage();
 
         assertEquals(getDriver().getCurrentUrl(), R.CONFIG.get("svLanguage"), "Wrong page");
+    }
+
+    @Test
+    @MethodOwner(owner = "demo")
+    public void testSingIn(){
+        HomePageBase homePage = initPage(getDriver(), HomePageBase.class);
+        homePage.open();
+        homePage.acceptCookies();
+        assertTrue(homePage.isPageOpened(), "Home page is not displayed");
+
+        LoginPageBase loginPage = homePage.getHeaderMenu().openLoginPage();
+        loginPage.signIn();
+
+        new WebDriverWait(getDriver(), Duration.ofSeconds(10))
+                .until(driver -> homePage.isPageOpened());
+
+        assertEquals(getDriver().getCurrentUrl(), R.CONFIG.get("homeUrl"), "Wrong page");
+
     }
 
 
