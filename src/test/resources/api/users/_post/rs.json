@@ -1,0 +1,8 @@
+{
+  "name": "Test",
+  "email": "test@mail.com",
+  "department": {
+    "id": 1,
+    "name": null
+  }
+}

@@ -120,8 +120,8 @@ public class NhlTest implements IAbstractTest {
         SoftAssert softAssert = new SoftAssert();
         for (ExtendedWebElement story : stories) {
 
-            new WebDriverWait(getDriver(), Duration.ofSeconds(10))
-                    .until(driver -> story.isVisible());
+            /*new WebDriverWait(getDriver(), Duration.ofSeconds(10))
+                    .until(driver -> story.isVisible());*/
 
             String storyTitle = story.getText().trim();
             softAssert.assertTrue(storyTitle.length() > 0, "Story is empty: " + story);
@@ -137,7 +137,7 @@ public class NhlTest implements IAbstractTest {
 
             LOGGER.info("Verified story with text: " + storyPage.getPageTitle().getText());
 
-            storyPage.navigateBack();
+            getDriver().navigate().back();
         }
         softAssert.assertAll();
     }

@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 public class APICarinaTest {
 
     @Test
-    @MethodOwner(owner = "yamete")
+    @MethodOwner(owner = "demo")
     public void testValidCityAndCountry() {
 
         String city = "London,uk";
@@ -20,7 +20,7 @@ public class APICarinaTest {
     }
 
     @Test
-    @MethodOwner(owner = "yamete")
+    @MethodOwner(owner = "demo")
     public void testInvalidCity() {
         String city = "InvalidCity";
         GetWeatherMethod getWeatherMethod = new GetWeatherMethod(city);
@@ -30,7 +30,7 @@ public class APICarinaTest {
     }
 
     @Test
-    @MethodOwner(owner = "yamete")
+    @MethodOwner(owner = "demo")
     public void testInvalidApiKey() {
         String city = "London";
         String invalidApiKey = "InvalidApiKey";
@@ -43,7 +43,7 @@ public class APICarinaTest {
     }
 
     @Test
-    @MethodOwner(owner = "yamete")
+    @MethodOwner(owner = "demo")
     public void testValidCityWithoutCountry() {
         String city = "London";
         GetWeatherMethod getWeatherMethod = new GetWeatherMethod(city);
@@ -53,7 +53,7 @@ public class APICarinaTest {
     }
 
     @Test
-    @MethodOwner(owner = "yamete")
+    @MethodOwner(owner = "demo")
     public void testResponseHeader() {
         String city = "London,uk";
         GetWeatherMethod getWeatherMethod = new GetWeatherMethod(city);
@@ -68,7 +68,7 @@ public class APICarinaTest {
     }
 
     @Test
-    @MethodOwner(owner = "yamete")
+    @MethodOwner(owner = "demo")
     public void testBadRequest() {
         String city = "";
         GetWeatherMethod getWeatherMethod = new GetWeatherMethod(city);
@@ -79,7 +79,7 @@ public class APICarinaTest {
     }
 
     @Test
-    @MethodOwner(owner = "yamete")
+    @MethodOwner(owner = "demo")
     public void testContentTypeHeader() {
         String city = "London,uk";
         GetWeatherMethod getWeatherMethod = new GetWeatherMethod(city);
@@ -91,7 +91,7 @@ public class APICarinaTest {
     }
 
     @Test
-    @MethodOwner(owner = "yamete")
+    @MethodOwner(owner = "demo")
     public void testResponseTime() {
         String city = "London,uk";
         GetWeatherMethod getWeatherMethod = new GetWeatherMethod(city);
