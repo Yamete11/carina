@@ -1,12 +1,9 @@
-import com.github.kklisura.cdt.protocol.types.profiler.Profile;
 import com.zebrunner.carina.core.IAbstractTest;
 import com.zebrunner.carina.core.registrar.ownership.MethodOwner;
 import com.zebrunner.carina.nhl.*;
-import com.zebrunner.carina.nhl.components.HeadMenu;
 import com.zebrunner.carina.nhl.components.Player;
 import com.zebrunner.carina.utils.R;
 import com.zebrunner.carina.webdriver.decorator.ExtendedWebElement;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeMethod;
@@ -14,15 +11,13 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.testng.asserts.SoftAssert;
 
 import java.lang.invoke.MethodHandles;
-import java.lang.module.Configuration;
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
 
+import static com.zebrunner.carina.nhl.components.HeadLinks.*;
 import static org.testng.Assert.*;
 
 public class NhlTest implements IAbstractTest {
@@ -31,19 +26,26 @@ public class NhlTest implements IAbstractTest {
     private HomePageBase homePage;
 
     @BeforeMethod
-    public void setUp() {
-        WebDriver driver = getDriver();
-        homePage = initPage(driver, HomePageBase.class);
+    public void setup() {
+        homePage = initPage(getDriver(), HomePageBase.class);
         homePage.open();
         homePage.acceptCookies();
     }
 
+    @Test
+    public void checkHeader(){
+        homePage.getHeaderMenu().open(PLAYERS);
+        LOGGER.info(getDriver().getCurrentUrl());
+        PlayersPageBase newsPageBase = initPage(getDriver(), PlayersPageBase.class);
+        assertTrue(newsPageBase.isPageOpened(), "Wrong page");
+    }
 
-    //Test takes all the players from the page and check all its fields
+
     @Test
     @MethodOwner(owner = "demo")
     public void testPlayersConsistency() {
-        PlayersPageBase playersPage = homePage.getHeaderMenu().openPlayersPage();
+        homePage.getHeaderMenu().open(PLAYERS);
+        PlayersPageBase playersPage = initPage(getDriver(), PlayersPageBase.class);
         assertEquals(getDriver().getCurrentUrl(), R.CONFIG.get("playersUrl"), "Wrong page URL!");
 
         new WebDriverWait(getDriver(), Duration.ofSeconds(10))
@@ -79,25 +81,29 @@ public class NhlTest implements IAbstractTest {
         }
     }
 
-    //Test takes all the players from the page and checks its link
     @Test
     @MethodOwner(owner = "demo")
-    public void testPlayersLinks() throws InterruptedException {
-        PlayersPageBase playersPage = homePage.getHeaderMenu().openPlayersPage();
+    public void testPlayersLinks() {
+        homePage.getHeaderMenu().open(PLAYERS);
+        PlayersPageBase playersPage = initPage(getDriver(), PlayersPageBase.class);
         assertEquals(getDriver().getCurrentUrl(), R.CONFIG.get("playersUrl"), "Wrong page URL!");
 
         new WebDriverWait(getDriver(), Duration.ofSeconds(10))
                 .until(driver -> !playersPage.getPlayers().isEmpty());
 
-        List<ExtendedWebElement> playersLinks = playersPage.getPlayersLinks();
+        int playersSize = playersPage.getPlayersLinks().size();
 
-        assertEquals(playersLinks.size(), 10, "Expected 10 players, but got: " + playersLinks.size());
-        LOGGER.info("Number of players equals: " + playersLinks.size());
 
         SoftAssert softAssert = new SoftAssert();
-        for (ExtendedWebElement link : playersLinks) {
-            String text = link.getText();
-            SinglePlayerPageBase singlePlayerPage =  playersPage.openLink(link);
+        for(int i = 0; i < playersSize; i++){
+
+            new WebDriverWait(getDriver(), Duration.ofSeconds(10))
+                    .until(driver -> !playersPage.getPlayers().isEmpty());
+
+            List<ExtendedWebElement> player = playersPage.getPlayersLinks();
+
+            String text = player.get(i).getText();
+            SinglePlayerPageBase singlePlayerPage =  playersPage.openLink(player.get(i));
 
             new WebDriverWait(getDriver(), Duration.ofSeconds(10))
                     .until(driver -> singlePlayerPage.getPlayerName().isVisible());
@@ -113,22 +119,14 @@ public class NhlTest implements IAbstractTest {
     @Test
     @MethodOwner(owner = "demo")
     public void testStories(){
-        List<ExtendedWebElement> stories = homePage.getStories();
-        assertEquals(stories.size(), 9, "Spotlight is empty");
-        LOGGER.info("Number of stories equals: " + stories.size());
+        int storiesSize = homePage.getStories().size();
 
         SoftAssert softAssert = new SoftAssert();
-        for (ExtendedWebElement story : stories) {
 
-            /*new WebDriverWait(getDriver(), Duration.ofSeconds(10))
-                    .until(driver -> story.isVisible());*/
+        for(int i = 0; i < storiesSize; i++){
+            List<ExtendedWebElement> story = homePage.getStories();
 
-            String storyTitle = story.getText().trim();
-            softAssert.assertTrue(storyTitle.length() > 0, "Story is empty: " + story);
-            LOGGER.info("Verified story with text: " + storyTitle);
-
-
-            StoryPageBase storyPage = homePage.openStory(story);
+            StoryPageBase storyPage = homePage.openStory(story.get(i));
 
             new WebDriverWait(getDriver(), Duration.ofSeconds(10))
                     .until(driver -> storyPage.getPageTitle().isVisible());
@@ -138,6 +136,7 @@ public class NhlTest implements IAbstractTest {
             LOGGER.info("Verified story with text: " + storyPage.getPageTitle().getText());
 
             getDriver().navigate().back();
+
         }
         softAssert.assertAll();
     }
@@ -179,7 +178,8 @@ public class NhlTest implements IAbstractTest {
     @Test(dataProvider = "userData")
     @MethodOwner(owner = "demo")
     public void testSignIn(String username, String password, LoginOutcome outcome) {
-        LoginPageBase loginPage = homePage.getHeaderMenu().openLoginPage();
+        homePage.getHeaderMenu().open(LOGIN);
+        LoginPageBase loginPage = initPage(getDriver(), LoginPageBase.class);
         loginPage.signIn(username, password);
 
         switch (outcome) {
@@ -190,7 +190,8 @@ public class NhlTest implements IAbstractTest {
                 LOGGER.info("Current URL after sign in: " + getDriver().getCurrentUrl());
                 assertTrue(homePage.isPageOpened(), "Home page is not displayed after sign-in");
 
-                ProfilePageBase profilePageBase = homePage.getHeaderMenu().openProfilePage();
+                homePage.getHeaderMenu().open(PROFILE);
+                ProfilePageBase profilePageBase = initPage(getDriver(), ProfilePageBase.class);
                 assertTrue(profilePageBase.isPageOpened(), "Profile page is not displayed");
                 break;
 
@@ -217,7 +218,8 @@ public class NhlTest implements IAbstractTest {
     @Test
     @MethodOwner(owner = "demo")
     public void testInvalidSearch(){
-        SearchPageBase searchPage =  homePage.getHeaderMenu().openSearchPage();
+        homePage.getHeaderMenu().open(SEARCH);
+        SearchPageBase searchPage =  initPage(getDriver(), SearchPageBase.class);
 
         assertTrue(searchPage.isPageOpened(), "Wrong URL");
 

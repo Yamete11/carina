@@ -33,6 +33,7 @@ public class LoginPage extends LoginPageBase{
 
     public LoginPage(WebDriver driver) {
         super(driver);
+        setPageAbsoluteURL("https://account.nhl.com/ui/?client_id=a2nhl&lang=en&redirect_uri=https%3A%2F%2Faccount.nhl.com%2Fui%2F&returnUrl=https%3A%2F%2Fwww.nhl.com%2F");
         setPageOpeningStrategy(PageOpeningStrategy.BY_ELEMENT);
         setUiLoadedMarker(pageTitle);
     }

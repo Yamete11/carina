@@ -1,25 +1,22 @@
 package com.zebrunner.carina.nhl.components;
 
+import com.zebrunner.carina.webdriver.decorator.ExtendedWebElement;
+import com.zebrunner.carina.webdriver.gui.AbstractPage;
+
 public enum HeadLinks {
-    NEWS("News", "https://www.nhl.com/news/"),
-    PLAYERS("Players", "https://www.nhl.com/player"),
-    LOGIN("Sign In", "https://account.nhl.com/ui/?client_id=a2nhl&lang=en&redirect_uri=https%3A%2F%2Faccount.nhl.com%2Fui%2F&returnUrl=https%3A%2F%2Fwww.nhl.com%2F"),
-    PROFILE("Profile", "https://account.nhl.com/ui/"),
-    SEARCH("Search", "https://www.nhl.com/search/");
+    NEWS("//a[@href='/news']"),
+    PLAYERS("//a[@href='/player']"),
+    LOGIN("//a[@class='nhl-o-menu__link' and @title='Sign In']"),
+    PROFILE("//a[@class='nhl-o-menu__link' and @title='Profile']"),
+    SEARCH("//a[@class='nhl-c-header__btn nhl-c-header__btn--search' and @title='Search']");
 
-    private final String title;
-    private final String url;
+    private final String xpath;
 
-    HeadLinks(String title, String url) {
-        this.title = title;
-        this.url = url;
+    HeadLinks(String xpath) {
+        this.xpath = xpath;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getUrl() {
-        return url;
+    public String getXpath() {
+        return xpath;
     }
 }

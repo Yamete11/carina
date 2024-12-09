@@ -22,6 +22,7 @@ public class PlayersPage extends PlayersPageBase{
 
     public PlayersPage(WebDriver driver) {
         super(driver);
+        setPageURL("players");
         setPageOpeningStrategy(PageOpeningStrategy.BY_ELEMENT);
         setUiLoadedMarker(pageTitle);
     }
